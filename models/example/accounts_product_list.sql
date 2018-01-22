@@ -29,6 +29,7 @@ with
         when arr___c > 24000
           then '>24000'
       end as arr_band
+      , customer__tier___c customer_tier
       , a.account__id___c org_id
       , p.name
     from
@@ -58,6 +59,7 @@ with
       , arr_band
       , org_id
       , name product_name
+      , customer_tier
       , count(name)
     from
       t1
@@ -66,6 +68,7 @@ with
       , 2
       , 3
       , 4
+      , 5
     order by
       1
   )
@@ -74,14 +77,20 @@ with
       t2.account_name
       , t2.org_id
       , t2.arr_band
+      , customer_tier
       , listagg(product_name, ',') within group(order by product_name) over(partition by t2.account_name) product_list
       , row_number() over(partition by t2.account_name)
     from
       t2
   )
 select
-  *
+  account_name
+  , org_id
+  , arr_band
+  , customer_tier
+  , product_list
 from
   t3
 where
   row_number = 1
+order by 4, 1

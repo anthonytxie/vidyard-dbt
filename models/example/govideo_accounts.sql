@@ -86,7 +86,7 @@ with
     group by
       1
   )
-  
+
 select
   account_name
   , t2.account_id
@@ -103,5 +103,3 @@ from
   t2
   join t3 on
     t2.account_id = t3.account_id
-select * from t2
-order by 1
